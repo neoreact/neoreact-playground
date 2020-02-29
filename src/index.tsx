@@ -42,7 +42,7 @@ const conductor = new NeoReact<any>({
 				}
 			],
 			communicationMethod: 'redux-saga',
-			required: true,
+			required: false,
 		}
 	],
 	to: '#root',
