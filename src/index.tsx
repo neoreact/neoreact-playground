@@ -37,7 +37,7 @@ const conductor = new NeoReact<any>({
 				{
 					name: 'my-zone',
 					target: '.hello',
-					component: <div id="my-zone" />,
+					component: <p>This is a zone!</p>,
 					order: 0
 				}
 			],

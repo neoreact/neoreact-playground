@@ -16,7 +16,20 @@ export class NeoReact<T> implements INeoReact<T> {
 	create() { }
 
 	public render() {
-		this.renderer(this.config.component, document.querySelector(this.config.to))
+		this.renderer(this.config.component, document.querySelector(this.config.to));
+
+		for (const service of this.config.services) {
+			for (const zone of service.zones) {
+				const els = document.querySelectorAll(zone.target);
+
+				if (els == null) {
+					console.error('Woops');
+					return;
+				}
+
+				els.forEach(el => this.renderer(zone.component, el));
+			}
+		}
 	}
 
 }
