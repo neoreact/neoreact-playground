@@ -23,7 +23,12 @@ export class NeoReact<T> implements INeoReact<T> {
 				const els = document.querySelectorAll(zone.target);
 
 				if (els == null) {
-					console.error('Woops');
+					if (service.required) {
+						throw new Error('Cannot render zone in required service, exiting.');
+					} else {
+						console.error(`Cannot render ${zone.name}`);
+					}
+
 					return;
 				}
 
