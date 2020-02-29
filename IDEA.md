@@ -69,14 +69,8 @@ const SagaSupport = {
 	name: 'redux-saga',
 	lifecycleDesired: 'pre-creation',
 	func: (instance: NeoExtension) => {
-		instance.stateHandler = (stateObjects: State[]) => {
-			const reduxSagaStates = [];
-			for (const state of stateObjects) {
-				if (state.type === 'redux-saga') {
-					reduxSagaStates.push(state);
-				}
-			}
-
+		instance.stateHandler = (state: State[]) => {
+			const reduxSagaStates = state.filter(({ type }) => type === 'redux-saga');
 			// do the thing
 		}
 	};
