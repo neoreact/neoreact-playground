@@ -26,9 +26,9 @@ export class NeoReact<T> implements INeoReact<T> {
 
 				if ((els == null || els.length === 0) && this.config.debug) {
 					if (service.required) {
-						throw new Error('Cannot render zone in required service, exiting.');
+						throw new Error(`Cannot render zone "${zone.name}" in required service "${service.name}", exiting.`);
 					} else {
-						console.error(`Cannot render ${zone.name} in service ${service.name}`);
+						console.error(`Cannot render zone "${zone.name}" in service "${service.name}"`);
 					}
 
 					return;
@@ -43,6 +43,7 @@ export class NeoReact<T> implements INeoReact<T> {
 								throw new Error('Cannot render zone in required service, exiting.');
 							} else {
 								console.error(`Cannot render ${zone.name} in service ${service.name}`);
+								console.error(err);
 							}
 						}
 					}

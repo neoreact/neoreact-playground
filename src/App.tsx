@@ -2,7 +2,18 @@ import React from 'react';
 import logo from './logo.svg';
 import './App.css';
 
+let int: number;
+
 function App() {
+  const [state, setState] = React.useState<number>(0);
+  React.useEffect(() => {
+    int = window.setInterval(() => {
+      console.log(state);
+      setState(state + 1);
+    }, 999);
+
+    return () => window.clearInterval(int);
+  }, [state]);
   return (
     <div className="App">
       <header className="App-header">
@@ -18,6 +29,12 @@ function App() {
         >
           Learn React
         </a>
+        {state}
+
+        <div className="hello"></div>
+        <div className="hello"></div>
+        <div className="hello"></div>
+        <div className="hello"></div>
       </header>
     </div>
   );
