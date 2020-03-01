@@ -8,8 +8,8 @@ export const App = () => {
   return (
     <div className="App">
       <header className="App-header">
-        <div className="hello1"></div>
-        <div className="hello"></div>
+        <div className="service1"></div>
+        <div className="service2"></div>
       </header>
     </div>
   );

@@ -25,7 +25,7 @@ const conductor = new NeoReact<any>(
   {
     services: [
       {
-        name: "oh shit whaddup",
+        name: "marketing",
         state: {
           type: "redux-saga",
           props: {
@@ -36,16 +36,22 @@ const conductor = new NeoReact<any>(
         zones: [
           {
             name: "my-zone",
-            target: ".hello",
-            component: props => <p>Zone 1</p>,
+            target: ".service1",
+            component: props => <p>Marketing - Zone 1</p>,
             order: 0
+          },
+          {
+            name: "my-zone-2",
+            target: ".service2",
+            component: props => <p>Finance - Zone 2</p>,
+            order: 1
           }
         ],
         communicationMethod: "redux-saga",
         required: true
       },
       {
-        name: "oh shit whaddup",
+        name: "finance",
         state: {
           type: "redux-saga",
           props: {
@@ -56,8 +62,20 @@ const conductor = new NeoReact<any>(
         zones: [
           {
             name: "my-zone-1",
-            target: ".hello1",
-            component: props => <p>Zone 2</p>,
+            target: ".service2",
+            component: props => <p>Finance - Zone 1</p>,
+            order: 1
+          },
+          {
+            name: "my-zone-2",
+            target: ".service1",
+            component: props => <div>Marketing - Zone 2</div>,
+            order: 2
+          },
+          {
+            name: "my-zone-3",
+            target: ".service1",
+            component: props => <div>Marketing - Zone 3</div>,
             order: 1
           }
         ],

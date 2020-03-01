@@ -1,5 +1,17 @@
 type JSXReturn = (props: any) => JSX.Element;
-type ComponentType = JSX.Element | JSXReturn;
+export type ComponentType = JSX.Element | JSXReturn;
+
+export type RenderService = Record<
+  string,
+  Record<
+    string,
+    {
+      service: string;
+      component: ComponentType;
+      order: number;
+    }
+  >
+>;
 
 export interface State<Type, PassedProps> {
   type: Type;
