@@ -52,19 +52,20 @@ export class NeoReact<T> implements INeoReact<T> {
       }
     }
 
-    Object.keys(renderByService).forEach(serviceName => {
-      const zoneValue = Object.values(renderByService[serviceName]);
+    for (const service in renderByService) {
+      const zoneValue = Object.values(renderByService[service]);
       let comp: JSX.Element[] = [];
-      const els = document.querySelector(serviceName);
-      zoneValue.forEach((zone, index) => {
+      const els = document.querySelector(service);
+      for (const zone of zoneValue) {
         if (typeof zone.component === "function") {
           comp.push(zone.component({}));
         } else {
           comp.push(zone.component);
         }
-      });
-      this.renderer(<React.Fragment>{comp}</React.Fragment>, els);
-    });
+      }
+      this.renderer(comp, els);
+    }
+
     console.log(renderByService);
   }
 }
