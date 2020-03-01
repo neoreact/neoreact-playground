@@ -39,7 +39,7 @@ export interface Extension {
 
 export interface Configuration<StateProps> {
     services: Service<StateProps>[];
-    to: DOMElementIdentifier;
+    target: DOMElementIdentifier;
     extensions?: { [key: string]: Extension };
     debug?: boolean;
     component: ComponentType;

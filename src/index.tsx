@@ -45,7 +45,7 @@ const conductor = new NeoReact<any>({
 			required: true,
 		}
 	],
-	to: '#root',
+	target: '#root',
 	extensions: {
 		reduxSaga: SagaSupport,
 	},

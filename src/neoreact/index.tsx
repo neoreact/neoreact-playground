@@ -22,7 +22,7 @@ export class NeoReact<T> implements INeoReact<T> {
 		} else {
 			component = this.config.component;
 		}
-		this.renderer(component, document.querySelector(this.config.to));
+		this.renderer(component, document.querySelector(this.config.target));
 
 		for (const service of this.config.services) {
 			for (const zone of service.zones) {
