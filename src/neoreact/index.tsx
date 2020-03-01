@@ -2,8 +2,10 @@ import {
   NeoReact as INeoReact,
   Configuration,
   Service,
-  NeoExtension
+  NeoExtension,
+  ComponentType
 } from "./src/core";
+import React from "react";
 
 export class NeoReact<T> implements INeoReact<T> {
   private extension: NeoExtension = {};
@@ -30,39 +32,48 @@ export class NeoReact<T> implements INeoReact<T> {
       component = this.config.component;
     }
     this.renderer(component, document.querySelector(this.config.target));
+    // TODO - move the types to Core.tsx
+    let renderByService: Record<
+      string,
+      Record<
+        string,
+        {
+          service: string;
+          component: ComponentType;
+          order: number;
+        }
+      >
+    > = {};
 
     for (const service of this.config.services) {
       for (const zone of service.zones) {
-        const els = document.querySelectorAll(zone.target);
-
-        if ((els == null || els.length === 0) && this.config.debug) {
-          if (service.required) {
-            throw new Error(
-              `Cannot render zone "${zone.name}" in required service "${service.name}", exiting.`
-            );
-          } else {
-            console.error(
-              `Cannot render zone "${zone.name}" in service "${service.name}"`
-            );
-          }
-
-          return;
-        }
-
-        els.forEach(el => {
-          try {
-            let comp: JSX.Element;
-
-            if (typeof zone.component === "function") {
-              comp = zone.component({});
-            } else {
-              comp = zone.component;
+        renderByService = {
+          ...renderByService,
+          [zone.target]: {
+            ...renderByService[zone.target],
+            [zone.name]: {
+              service: service.name,
+              component: zone.component,
+              order: zone.order
             }
-
-            this.renderer(comp, el);
-          } catch (err) {}
-        });
+          }
+        };
       }
     }
+
+    Object.keys(renderByService).forEach(serviceName => {
+      const zoneValue = Object.values(renderByService[serviceName]);
+      let comp: JSX.Element[] = [];
+      const els = document.querySelector(serviceName);
+      zoneValue.forEach((zone, index) => {
+        if (typeof zone.component === "function") {
+          comp.push(zone.component({}));
+        } else {
+          comp.push(zone.component);
+        }
+      });
+      this.renderer(<React.Fragment>{comp}</React.Fragment>, els);
+    });
+    console.log(renderByService);
   }
 }

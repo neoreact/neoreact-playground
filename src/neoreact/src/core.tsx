@@ -1,5 +1,5 @@
 type JSXReturn = (props: any) => JSX.Element;
-type ComponentType = JSX.Element | JSXReturn;
+export type ComponentType = JSX.Element | JSXReturn;
 
 export interface State<Type, PassedProps> {
   type: Type;
