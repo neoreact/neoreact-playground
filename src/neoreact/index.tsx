@@ -33,7 +33,7 @@ export class NeoReact<T> implements INeoReact<T> {
       component = this.config.component;
     }
     this.renderer(component, document.querySelector(this.config.target));
-    // TODO - move the types to Core.tsx
+
     let renderByService: RenderService = {};
 
     for (const service of this.config.services) {
