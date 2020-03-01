@@ -16,13 +16,17 @@ export class NeoReact<T> implements INeoReact<T> {
 	create() { }
 
 	public render() {
-		this.renderer(this.config.component, document.querySelector(this.config.to));
+		let component;
+		if (typeof this.config.component === 'function') {
+			component = this.config.component({});
+		} else {
+			component = this.config.component;
+		}
+		this.renderer(component, document.querySelector(this.config.to));
 
 		for (const service of this.config.services) {
 			for (const zone of service.zones) {
 				const els = document.querySelectorAll(zone.target);
-
-				console.log(els);
 
 				if ((els == null || els.length === 0) && this.config.debug) {
 					if (service.required) {
@@ -36,7 +40,15 @@ export class NeoReact<T> implements INeoReact<T> {
 
 				els.forEach(el => {
 					try {
-						this.renderer(zone.component, el)
+						let comp: JSX.Element;
+
+						if (typeof zone.component === 'function') {
+							comp = zone.component({});
+						} else {
+							comp = zone.component;
+						}
+
+						this.renderer(comp, el)
 					} catch (err) {
 						if (this.config.debug) {
 							if (service.required) {

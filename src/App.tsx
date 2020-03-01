@@ -4,7 +4,7 @@ import './App.css';
 
 let int: number;
 
-function App() {
+export const App = () => {
   const [state, setState] = React.useState<number>(0);
   React.useEffect(() => {
     int = window.setInterval(() => {
@@ -34,10 +34,8 @@ function App() {
         <div className="hello"></div>
         <div className="hello"></div>
         <div className="hello"></div>
-        <div className="hello"></div>
+        <div className="hello" id={state.toString()}></div>
       </header>
     </div>
   );
 }
-
-export default App;

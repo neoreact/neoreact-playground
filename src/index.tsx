@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-import App from './App';
+import { App } from './App';
 import * as serviceWorker from './serviceWorker';
 import { NeoReact } from './neoreact';
 import { Extension } from './neoreact/src/core';
@@ -37,7 +37,7 @@ const conductor = new NeoReact<any>({
 				{
 					name: 'my-zone',
 					target: '.hello',
-					component: <p>This is a zone!</p>,
+					component: props => <p>{JSON.stringify(props, null, 4)}</p>,
 					order: 0
 				}
 			],

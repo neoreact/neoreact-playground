@@ -1,3 +1,6 @@
+type JSXReturn = (props: any) => JSX.Element;
+type ComponentType = JSX.Element | JSXReturn;
+
 export interface State<Type, PassedProps> {
     type: Type;
     props: PassedProps;
@@ -8,14 +11,14 @@ export type DOMElementIdentifier = string;
 export interface Zone {
     name: string;
     target: DOMElementIdentifier;
-    component: JSX.Element;
+    component: ComponentType;
     order: number;
 }
 
 export interface Service<StateProps> {
     name: string;
     // TODO: Should this just be part of the zones & we add routes?
-    component: JSX.Element;
+    component: ComponentType;
     // State object
     state: State<string, StateProps>;
     // Zones. Things we'll render into
@@ -39,7 +42,7 @@ export interface Configuration<StateProps> {
     to: DOMElementIdentifier;
     extensions?: { [key: string]: Extension };
     debug?: boolean;
-    component: JSX.Element;
+    component: ComponentType;
 }
 
 export interface NeoExtension {
