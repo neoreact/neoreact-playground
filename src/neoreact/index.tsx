@@ -3,7 +3,8 @@ import {
   Configuration,
   Service,
   NeoExtension,
-  ComponentType
+  ComponentType,
+  RenderService
 } from "./src/core";
 import React from "react";
 
@@ -33,17 +34,7 @@ export class NeoReact<T> implements INeoReact<T> {
     }
     this.renderer(component, document.querySelector(this.config.target));
     // TODO - move the types to Core.tsx
-    let renderByService: Record<
-      string,
-      Record<
-        string,
-        {
-          service: string;
-          component: ComponentType;
-          order: number;
-        }
-      >
-    > = {};
+    let renderByService: RenderService = {};
 
     for (const service of this.config.services) {
       for (const zone of service.zones) {
