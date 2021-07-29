@@ -4,7 +4,8 @@ import {
   Service,
   NeoExtension,
   ComponentType,
-  RenderService
+  RenderService,
+  NeoReactComponentProps
 } from "./src/core";
 import React from "react";
 
@@ -21,14 +22,14 @@ export class NeoReact<T> implements INeoReact<T> {
     }
   }
 
-  add(service: Service<T>) {}
-
-  create() {}
+  /** TODO */
+  public add = undefined;
+  public create = undefined;
 
   public render() {
-    let component;
+    let component: JSX.Element;
     if (typeof this.config.component === "function") {
-      component = this.config.component({});
+      component = this.config.component({ extensions: this.extension}) as React.ReactElement<NeoReactComponentProps>;
     } else {
       component = this.config.component;
     }
@@ -57,15 +58,15 @@ export class NeoReact<T> implements INeoReact<T> {
       let comp: JSX.Element[] = [];
       const els = document.querySelector(service);
       for (const zone of zoneValue) {
+        console.log(zone.component)
         if (typeof zone.component === "function") {
-          comp.push(zone.component({}));
+          comp.push(zone.component({ extensions: this.extension }) as React.ReactElement<NeoReactComponentProps>);
         } else {
+          zone.component.props = { ...zone.component.props, extensions: this.extension };
           comp.push(zone.component);
         }
       }
       this.renderer(comp, els);
     }
-
-    console.log(renderByService);
   }
 }

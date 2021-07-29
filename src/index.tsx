@@ -5,6 +5,8 @@ import { App } from "./App";
 import * as serviceWorker from "./serviceWorker";
 import { NeoReact } from "./neoreact";
 import { Extension } from "./neoreact/src/core";
+import { Generic } from "./components/generic";
+import { Hello } from "./components/hello";
 // If you want your app to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.
 // Learn more about service workers: https://bit.ly/CRA-PWA
@@ -18,6 +20,16 @@ const SagaSupport: Extension = {
   func: (instance: any) => {
     instance.stateHandler = (state: any[]) =>
       state.filter(({ type }) => type === "redux-saga");
+  }
+};
+
+/** example of redux saga implementation (doesnt work) */
+const Utility: Extension = {
+  name: "utility-test",
+  lifecycleDesired: "pre-creation",
+  type: "utility",
+  func: (arg: any) => {
+    console.log(arg)
   }
 };
 
@@ -37,13 +49,13 @@ const conductor = new NeoReact<any>(
           {
             name: "my-zone",
             target: ".service1",
-            component: props => <p>Marketing - Zone 1</p>,
+            component: props => <Generic {...props} children={<p>Marketing - Zone 1</p>} />,
             order: 0
           },
           {
             name: "my-zone-2",
             target: ".service2",
-            component: props => <p>Finance - Zone 2</p>,
+            component: Hello,
             order: 1
           }
         ],

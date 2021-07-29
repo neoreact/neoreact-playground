@@ -1,5 +1,4 @@
-type JSXReturn = (props: any) => JSX.Element;
-export type ComponentType = JSX.Element | JSXReturn;
+export type ComponentType = JSX.Element | React.FC<NeoReactComponentProps>;
 
 export type RenderService = Record<
   string,
@@ -59,18 +58,25 @@ export interface Configuration<StateProps> {
   component: ComponentType;
 }
 
-export interface NeoExtension {
+export type NeoExtensionGenericFunc<T = any, R = any> = (argument: T) => R;
+
+export interface NeoExtension<T = any, R = any> {
   // This is only exposed to the extensions
   // This only supports ONE state handler. Do we want to support multiple?
   stateHandler?: (state: State<string, any>[]) => void;
+  utility?: NeoExtensionGenericFunc<T, R>[];
 }
 
 export interface NeoReact<StateProps> {
   // Add a service dynamically.
-  add: (service: Service<StateProps>) => void;
+  add?: (service: Service<StateProps>) => void;
   // Conduct the creation of the app. (?)
-  create: () => void;
+  create?: () => void;
   // Initialize the application, this should pretty much run at the ReactDOM.render() time.
   // constructor: (config: Configuration<StateProps>) => NeoReact<StateProps>;
   debug?: boolean;
+}
+
+export interface NeoReactComponentProps {
+  extensions: NeoExtension;
 }
