@@ -69,7 +69,7 @@ const conductor = new NeoReact<any>(
           {
             name: "my-zone-2",
             target: ".service1",
-            component: props => <div>Marketing - Zone 2</div>,
+            component: props => <div>Marketing - Zone 2 {JSON.stringify(props)}</div>,
             order: 2
           },
           {

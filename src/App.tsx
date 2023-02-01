@@ -1,15 +1,29 @@
 import React from "react";
-import logo from "./logo.svg";
 import "./App.css";
 
-let int: number;
+interface Props {
+  className?: string;
+  hello: string;
+  children?: any;
+}
+
+const PassThrough: React.FC<Props> = ({ className, children, ...props }) => (
+  <div className={className}>
+    {React.Children.map(children, child => {
+      console.log(child, props);
+      return (
+        React.cloneElement(child, props)
+      )
+    })}
+  </div>
+);
 
 export const App = () => {
   return (
     <div className="App">
       <header className="App-header">
-        <div className="service1"></div>
-        <div className="service2"></div>
+        <PassThrough className="service1" hello="world"></PassThrough>
+        <PassThrough className="service2" hello="nani"></PassThrough>
       </header>
     </div>
   );

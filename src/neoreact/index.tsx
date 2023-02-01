@@ -3,10 +3,9 @@ import {
   Configuration,
   Service,
   NeoExtension,
-  ComponentType,
   RenderService
 } from "./src/core";
-import React from "react";
+
 
 export class NeoReact<T> implements INeoReact<T> {
   private extension: NeoExtension = {};
@@ -21,9 +20,9 @@ export class NeoReact<T> implements INeoReact<T> {
     }
   }
 
-  add(service: Service<T>) {}
+  add(service: Service<T>) { }
 
-  create() {}
+  create() { }
 
   public render() {
     let component;
