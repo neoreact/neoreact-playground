@@ -1,5 +1,6 @@
-type JSXReturn = (props: any) => JSX.Element;
-export type ComponentType = JSX.Element | JSXReturn;
+import { ReactNode } from "react";
+
+export type ComponentType = ReactNode;
 
 export type RenderService = Record<
   string,
@@ -9,6 +10,7 @@ export type RenderService = Record<
       service: string;
       component: ComponentType;
       order: number;
+      state: Service<unknown>["state"];
     }
   >
 >;

@@ -4,7 +4,10 @@ import "./index.css";
 import { App } from "./App";
 import * as serviceWorker from "./serviceWorker";
 import { NeoReact } from "./neoreact";
-import { Extension } from "./neoreact/src/core";
+import { ComponentType, Extension, NeoExtension } from "./neoreact/src/core";
+import { MyComponent } from "./Component";
+import { TextComponent } from "./Generic";
+import { ServiceComponent } from "./ServiceComponent";
 // If you want your app to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.
 // Learn more about service workers: https://bit.ly/CRA-PWA
@@ -15,9 +18,12 @@ const SagaSupport: Extension = {
   name: "redux-saga",
   lifecycleDesired: "pre-creation",
   type: "stateHandler",
-  func: (instance: any) => {
-    instance.stateHandler = (state: any[]) =>
+  func: (instance: NeoExtension) => {
+    instance.stateHandler = (state: any[]) => {
       state.filter(({ type }) => type === "redux-saga");
+      console.log(state);
+    }
+    console.log("yeah");
   }
 };
 
@@ -37,13 +43,13 @@ const conductor = new NeoReact<any>(
           {
             name: "my-zone",
             target: ".service1",
-            component: props => <p>Marketing - Zone 1</p>,
+            component: <TextComponent text="Marketing - Zone 1 (order 0)" />,
             order: 0
           },
           {
             name: "my-zone-2",
             target: ".service2",
-            component: props => <p>Finance - Zone 2</p>,
+            component: <TextComponent text="Finance - Zone 2 (order 1)" />,
             order: 1
           }
         ],
@@ -63,24 +69,43 @@ const conductor = new NeoReact<any>(
           {
             name: "my-zone-1",
             target: ".service2",
-            component: props => <p>Finance - Zone 1</p>,
+            component: <TextComponent text="Finance - Zone 1" />,
             order: 1
           },
           {
             name: "my-zone-2",
             target: ".service1",
-            component: props => <div>Marketing - Zone 2</div>,
+            component: <TextComponent text="Marketing - Zone 2 (order 2)" />,
             order: 2
           },
           {
             name: "my-zone-3",
             target: ".service1",
-            component: props => <div>Marketing - Zone 3</div>,
-            order: 1
+            component: <MyComponent />,
+            order: 3
           }
         ],
         communicationMethod: "redux-saga",
         required: true
+      },
+      {
+        name: "services",
+        required: true,
+        state: {
+          type: "redux-saga",
+          props: {
+            reducers: [],
+            sagas: []
+          }
+        },
+        zones: [
+          {
+            name: "test",
+            target: ".services",
+            component: <ServiceComponent />,
+            order: 1,
+          }
+        ]
       }
     ],
     target: "#root",
@@ -95,5 +120,4 @@ const conductor = new NeoReact<any>(
 );
 
 (window as any).conductor = conductor;
-console.log(conductor);
 conductor.render();

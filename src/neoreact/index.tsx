@@ -1,12 +1,11 @@
+import React, { DOMElement, JSXElementConstructor, ReactElement, ReactNode } from "react";
 import {
   NeoReact as INeoReact,
   Configuration,
   Service,
   NeoExtension,
-  ComponentType,
   RenderService
 } from "./src/core";
-import React from "react";
 
 export class NeoReact<T> implements INeoReact<T> {
   private extension: NeoExtension = {};
@@ -21,18 +20,17 @@ export class NeoReact<T> implements INeoReact<T> {
     }
   }
 
-  add(service: Service<T>) {}
+  add(service: Service<T>): () => void {
+    this.config.services.push(service);
+    return () => this.render();
+  }
 
-  create() {}
+  create() { }
 
   public render() {
-    let component;
-    if (typeof this.config.component === "function") {
-      component = this.config.component({});
-    } else {
-      component = this.config.component;
-    }
-    this.renderer(component, document.querySelector(this.config.target));
+    const component = this.config.component;
+
+    this.renderer((component ?? <div></div>) as React.ReactElement, document.querySelector(this.config.target));
 
     let renderByService: RenderService = {};
 
@@ -45,7 +43,8 @@ export class NeoReact<T> implements INeoReact<T> {
             [zone.name]: {
               service: service.name,
               component: zone.component,
-              order: zone.order
+              order: zone.order,
+              state: service.state
             }
           }
         };
@@ -53,19 +52,19 @@ export class NeoReact<T> implements INeoReact<T> {
     }
 
     for (const service in renderByService) {
-      const zoneValue = Object.values(renderByService[service]);
-      let comp: JSX.Element[] = [];
+      const zoneValue = Object.values(renderByService[service]).sort((first, second) => first.order - second.order);
+      const comp: ReactNode[] = [];
       const els = document.querySelector(service);
-      for (const zone of zoneValue) {
-        if (typeof zone.component === "function") {
-          comp.push(zone.component({}));
-        } else {
-          comp.push(zone.component);
-        }
-      }
-      this.renderer(comp, els);
-    }
 
-    console.log(renderByService);
+      for (const zone of zoneValue) {
+        const clone = React.cloneElement(zone.component as ReactElement<any, string | JSXElementConstructor<any>>, {
+          extensions: this.config.extensions,
+          state: zone.state,
+        })
+        comp.push(clone);
+      }
+
+      this.renderer(comp as any as React.DOMElement<React.DOMAttributes<Element>, Element>, els);
+    }
   }
 }
